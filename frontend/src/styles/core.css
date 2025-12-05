@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #FFC107;
+  --color-primary-dark: #FFA000;
+  --color-background: #121212;
+  --color-surface: #1E1E1E;
+  --color-surface-elevated: #2C2C2C;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #B3B3B3;
+  --color-success: #4CAF50;
+  --color-watched: rgba(76, 175, 80, 0.15);
+  --border-radius: 12px;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text-primary;
+  }
+}
