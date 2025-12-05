@@ -31,3 +31,9 @@ checkPreviousChapters: userId=1, chapterId=3
 checkPreviousChapters: unwatched count=0
 markChapterWatched: userId=1, chapterId=3, markPrevious=false
 upsertWatchProgress: userId=1, chapterId=3, watched=true
+unmarkChapterWatched: userId=1, chapterId=1
+checkPreviousChapters: userId=1, chapterId=1
+checkPreviousChapters: unwatched count=0
+markChapterWatched: userId=1, chapterId=1, markPrevious=false
+upsertWatchProgress: userId=1, chapterId=1, watched=true
+unmarkChapterWatched: userId=1, chapterId=1

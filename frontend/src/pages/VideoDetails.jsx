@@ -76,10 +76,41 @@ export default function VideoDetails() {
 
             {/* Content */}
             <div className="max-w-5xl mx-auto px-8 mt-8">
-                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                    <Play size={24} className="text-primary" />
-                    Chapters
-                </h2>
+                {/* Season Progress Header */}
+                <div className="mb-6">
+                    <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-4">
+                            <h2 className="text-2xl font-bold flex items-center gap-2">
+                                Season 1
+                            </h2>
+                            <span className="text-text-secondary font-mono text-lg">
+                                {video.chapters?.filter(c => c.watched).length}/{video.chapters?.length}
+                            </span>
+                        </div>
+
+                        <div className="flex-shrink-0">
+                            {video.chapters?.length > 0 && video.chapters.every(c => c.watched) ? (
+                                <div className="bg-green-500 rounded-full p-0.5">
+                                    <CheckCircle className="text-background" size={24} />
+                                </div>
+                            ) : (
+                                <Circle className="text-text-secondary" size={24} />
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="h-1.5 w-full bg-surface-elevated rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-green-500 transition-all duration-500 ease-out"
+                            style={{
+                                width: `${(video.chapters?.length > 0
+                                    ? (video.chapters.filter(c => c.watched).length / video.chapters.length) * 100
+                                    : 0)}%`
+                            }}
+                        />
+                    </div>
+                </div>
 
                 <div className="space-y-2">
                     {video.chapters?.sort((a, b) => a.sortOrder - b.sortOrder).map((chapter) => (
