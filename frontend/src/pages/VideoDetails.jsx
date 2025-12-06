@@ -4,6 +4,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import client from '../api/client';
 import { ArrowLeft, CheckCircle, Circle, Play } from 'lucide-react';
 
+// Helper to format seconds as human-readable duration
+const formatDuration = (seconds) => {
+    if (!seconds || seconds < 0) return '0:00';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    if (h > 0) {
+        return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+    return `${m}:${s.toString().padStart(2, '0')}`;
+};
 
 export default function VideoDetails() {
     const { id } = useParams();
@@ -126,7 +137,7 @@ export default function VideoDetails() {
                             <div className="flex-grow">
                                 <h3 className="font-medium group-hover:text-primary transition-colors">{chapter.title}</h3>
                                 <span className="text-xs text-text-secondary">
-                                    {Math.floor(chapter.startTimeSeconds / 60)}:{(chapter.startTimeSeconds % 60).toString().padStart(2, '0')}
+                                    {formatDuration(chapter.startTimeSeconds)}
                                 </span>
                             </div>
 

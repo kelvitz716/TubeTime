@@ -6,6 +6,18 @@ import { Plus, Play, Clock, Trash2, CheckSquare, XSquare } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 
+// Helper to format seconds as human-readable duration
+const formatDuration = (seconds) => {
+    if (!seconds || seconds < 0) return '0:00';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    if (h > 0) {
+        return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+    return `${m}:${s.toString().padStart(2, '0')}`;
+};
+
 export default function Dashboard() {
     const { user, logout } = useAuth();
     const queryClient = useQueryClient();
@@ -28,8 +40,10 @@ export default function Dashboard() {
     });
 
     const addVideoMutation = useMutation({
-        mutationFn: async (url) => {
-            await client.post('/videos', { url });
+        mutationFn: async (payload) => {
+            // Payload can be string (url) or object { url, manualChapters }
+            const data = typeof payload === 'string' ? { url: payload } : payload;
+            await client.post('/videos', data);
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['videos']);
@@ -250,7 +264,7 @@ export default function Dashboard() {
                                     )}
 
                                     <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 text-xs rounded">
-                                        {Math.floor(video.durationSeconds / 60)}:{(video.durationSeconds % 60).toString().padStart(2, '0')}
+                                        {formatDuration(video.durationSeconds)}
                                     </div>
                                 </div>
                                 <div className="p-4">
@@ -298,11 +312,27 @@ export default function Dashboard() {
                     <div className="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
                         <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl pointer-events-auto animate-pop-in">
                             <h3 className="text-xl font-bold mb-4">Check Chapters</h3>
-                            <p className="text-text-secondary mb-6">
+                            <p className="text-text-secondary mb-4">
                                 We found {confirmationModal.info.chapters?.length || 0} chapter(s) for "{confirmationModal.info.title}".
-                                <br /><br />
-                                Would you like to import this video anyway? It will be added as a single episode.
                             </p>
+                            <p className="text-text-secondary mb-4 text-sm">
+                                If chapters are available in the description or comments, paste them below.
+                                <br />
+                                <a
+                                    href={confirmationModal.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-primary hover:underline"
+                                >
+                                    Open video in YouTube ↗
+                                </a>
+                            </p>
+
+                            <textarea
+                                className="w-full h-32 bg-surface-elevated rounded-xl p-3 text-sm text-text-primary mb-6 outline-none focus:ring-2 focus:ring-primary resize-none"
+                                placeholder="Paste chapters here...&#10;00:00 Intro&#10;01:30 Topic 1"
+                                id="manual-chapters-input"
+                            />
 
                             <div className="flex justify-end gap-4">
                                 <button
@@ -312,7 +342,13 @@ export default function Dashboard() {
                                     Cancel
                                 </button>
                                 <button
-                                    onClick={() => addVideoMutation.mutate(confirmationModal.url)}
+                                    onClick={() => {
+                                        const manualText = document.getElementById('manual-chapters-input').value;
+                                        addVideoMutation.mutate({
+                                            url: confirmationModal.url,
+                                            manualChapters: manualText
+                                        });
+                                    }}
                                     className="px-4 py-2 rounded-lg bg-primary text-background font-bold hover:bg-primary-dark transition-colors"
                                 >
                                     Import Video

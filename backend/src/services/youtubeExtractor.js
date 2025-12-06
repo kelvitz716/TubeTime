@@ -79,10 +79,11 @@ export class YouTubeExtractor {
         throw new Error("oEmbed not implemented yet");
     }
 
-    parseChaptersFromDescription(description, totalDuration) {
-        const lines = description.split('\n');
+    parseChapters(text) {
+        const lines = text.split('\n');
         const chapters = [];
-        const timeRegex = /(\d{1,2}):(\d{2})(?::(\d{2}))?/;
+        // Regex to match timestamps like 00:00:00 or (00:00:00) or 0:00 - more permissive 
+        const timeRegex = /\(?(\d{1,2}):(\d{2})(?::(\d{2}))?\)?/;
 
         let chapterCount = 1;
         for (const line of lines) {
@@ -93,7 +94,12 @@ export class YouTubeExtractor {
                 const seconds = match[3] ? parseInt(match[3]) : parseInt(match[2]);
 
                 const startTime = hours * 3600 + minutes * 60 + seconds;
-                const title = line.replace(match[0], '').replace(/^[-\s]+/, '').trim();
+
+                // Clean title: remove the full match and leading/trailing non-alphanumeric chars
+                let title = line.replace(match[0], '').trim();
+                title = title.replace(/^[-\s\)\(]+/, '').trim(); // Remove leading dash, parens
+                // Remove common emoji patterns
+                title = title.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}☁️🎤⭐️]+/gu, '').trim();
 
                 chapters.push({
                     chapterNumber: chapterCount++,
@@ -102,6 +108,11 @@ export class YouTubeExtractor {
                 });
             }
         }
+        return chapters;
+    }
+
+    parseChaptersFromDescription(description, totalDuration) {
+        const chapters = this.parseChapters(description);
 
         // Calculate end times
         for (let i = 0; i < chapters.length; i++) {

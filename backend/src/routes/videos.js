@@ -53,9 +53,18 @@ router.post('/', async (req, res) => {
             youtubeUrl: url,
         }).onConflictDoNothing(); // Simple handling for now
 
+        // Handle manual chapters if provided
+        let finalChapters = info.chapters;
+        if (req.body.manualChapters) {
+            const manualParsed = youtubeExtractor.parseChaptersFromDescription(req.body.manualChapters, info.durationSeconds);
+            if (manualParsed.length > 0) {
+                finalChapters = manualParsed;
+            }
+        }
+
         // Save chapters
-        if (info.chapters && info.chapters.length > 0) {
-            for (const ch of info.chapters) {
+        if (finalChapters && finalChapters.length > 0) {
+            for (const ch of finalChapters) {
                 await db.insert(chapters).values({
                     videoId: info.id,
                     userId: req.user.id,
