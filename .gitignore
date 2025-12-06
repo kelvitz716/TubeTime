@@ -33,3 +33,10 @@ tubetime.db-journal
 .vscode
 *.swp
 *.swo
+
+# Temporary debug files
+debug_*.js
+verify_*.js
+test_*.js
+check_*.js
+output*.txt
