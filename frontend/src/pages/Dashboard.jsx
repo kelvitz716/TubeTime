@@ -45,7 +45,7 @@ export default function Dashboard() {
             return res.data;
         },
         onSuccess: (data, variables) => {
-            if (data.chapters && data.chapters.length > 0) {
+            if (data.chapters && data.chapters.length > 1) {
                 addVideoMutation.mutate(variables);
             } else {
                 setConfirmationModal({ url: variables, info: data });
@@ -299,7 +299,7 @@ export default function Dashboard() {
                         <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl pointer-events-auto">
                             <h3 className="text-xl font-bold mb-4">No Chapters Found</h3>
                             <p className="text-text-secondary mb-6">
-                                The video "{confirmationModal.info.title}" does not appear to have any chapters.
+                                The video "{confirmationModal.info.title}" appears to have {confirmationModal.info.chapters?.length || 0} chapter(s).
                                 Do you want to proceed with importing it anyway?
                             </p>
 
