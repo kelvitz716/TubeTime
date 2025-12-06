@@ -163,10 +163,10 @@ export default function Dashboard() {
                         />
                         <button
                             type="submit"
-                            disabled={addVideoMutation.isPending}
+                            disabled={addVideoMutation.isPending || previewVideoMutation.isPending}
                             className="px-6 py-3 bg-primary hover:bg-primary-dark text-background font-bold rounded-xl transition-colors disabled:opacity-50"
                         >
-                            {addVideoMutation.isPending ? 'Adding...' : 'Add'}
+                            {previewVideoMutation.isPending ? 'Verifying...' : addVideoMutation.isPending ? 'Adding...' : 'Add'}
                         </button>
                         <button
                             type="button"
@@ -294,27 +294,28 @@ export default function Dashboard() {
             {/* Confirmation Modal for No Chapters */}
             {confirmationModal && (
                 <div className="relative z-50">
-                    <div className="fixed inset-0 bg-black/70" aria-hidden="true" onClick={() => setConfirmationModal(null)} />
+                    <div className="fixed inset-0 bg-black/70 transition-opacity animate-in fade-in duration-200" aria-hidden="true" onClick={() => setConfirmationModal(null)} />
                     <div className="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
-                        <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl pointer-events-auto">
-                            <h3 className="text-xl font-bold mb-4">No Chapters Found</h3>
+                        <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl pointer-events-auto animate-pop-in">
+                            <h3 className="text-xl font-bold mb-4">Check Chapters</h3>
                             <p className="text-text-secondary mb-6">
-                                The video "{confirmationModal.info.title}" appears to have {confirmationModal.info.chapters?.length || 0} chapter(s).
-                                Do you want to proceed with importing it anyway?
+                                We found {confirmationModal.info.chapters?.length || 0} chapter(s) for "{confirmationModal.info.title}".
+                                <br /><br />
+                                Would you like to import this video anyway? It will be added as a single episode.
                             </p>
 
                             <div className="flex justify-end gap-4">
                                 <button
                                     onClick={() => setConfirmationModal(null)}
-                                    className="px-4 py-2 rounded-lg text-text-secondary hover:bg-surface-elevated"
+                                    className="px-4 py-2 rounded-lg text-text-secondary hover:bg-surface-elevated transition-colors"
                                 >
-                                    No, cancel
+                                    Cancel
                                 </button>
                                 <button
                                     onClick={() => addVideoMutation.mutate(confirmationModal.url)}
-                                    className="px-4 py-2 rounded-lg bg-primary text-background font-bold hover:bg-primary-dark"
+                                    className="px-4 py-2 rounded-lg bg-primary text-background font-bold hover:bg-primary-dark transition-colors"
                                 >
-                                    Yes, proceed
+                                    Import Video
                                 </button>
                             </div>
                         </div>
