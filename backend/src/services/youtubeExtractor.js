@@ -37,6 +37,8 @@ export class YouTubeExtractor {
         })) || [];
 
         // If no chapters found by yt-dlp, try to parse description from yt-dlp output
+        // Manual parsing disabled to avoid false positives (user feedback)
+        /*
         if (chapters.length === 0 && data.description) {
             const regexChapters = this.parseChaptersFromDescription(data.description, data.duration);
             if (regexChapters.length > 0) {
@@ -50,16 +52,17 @@ export class YouTubeExtractor {
                 };
             }
         }
+        */
 
-        if (chapters.length === 0) {
-            // Fallback to single chapter
-            chapters.push({
-                chapterNumber: 1,
-                title: data.title,
-                startTimeSeconds: 0,
-                endTimeSeconds: data.duration
-            });
-        }
+        // Fallback logic removed to allow detection of "no chapters"
+        // if (chapters.length === 0) {
+        //     chapters.push({
+        //         chapterNumber: 1,
+        //         title: data.title,
+        //         startTimeSeconds: 0,
+        //         endTimeSeconds: data.duration
+        //     });
+        // }
 
         return {
             id: data.id,
