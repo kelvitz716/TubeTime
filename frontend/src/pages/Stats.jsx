@@ -57,122 +57,172 @@ export default function Stats() {
 
             <div className="max-w-5xl mx-auto px-8 mt-8">
                 {/* Summary Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     {/* Videos Card */}
-                    <div className="bg-surface rounded-2xl p-6 border border-surface-elevated">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 bg-blue-500/20 rounded-lg">
-                                <PlayCircle className="text-blue-500" size={24} />
-                            </div>
-                        </div>
-                        <div className="text-3xl font-bold">{summary.totalVideos}</div>
-                        <div className="text-text-secondary text-sm">Videos</div>
+                    <div className="bg-surface rounded-2xl p-6 border border-white/5 shadow-glow-success text-center">
+                        <div className="text-3xl font-bold text-success mb-1">{summary.totalVideos}</div>
+                        <div className="text-text-secondary text-sm font-medium uppercase tracking-wider">Videos</div>
                     </div>
 
                     {/* Chapters Card */}
-                    <div className="bg-surface rounded-2xl p-6 border border-surface-elevated">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 bg-green-500/20 rounded-lg">
-                                <CheckCircle className="text-green-500" size={24} />
-                            </div>
-                        </div>
-                        <div className="text-3xl font-bold">
+                    <div className="bg-surface rounded-2xl p-6 border border-white/5 shadow-glow-neon-blue text-center">
+                        <div className="text-3xl font-bold text-neon-blue mb-1">
                             {summary.watchedChapters}/{summary.totalChapters}
                         </div>
-                        <div className="text-text-secondary text-sm">Chapters Watched</div>
+                        <div className="text-text-secondary text-sm font-medium uppercase tracking-wider">Chapters</div>
                     </div>
 
                     {/* Watch Time Card */}
-                    <div className="bg-surface rounded-2xl p-6 border border-surface-elevated">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 bg-purple-500/20 rounded-lg">
-                                <Clock className="text-purple-500" size={24} />
-                            </div>
-                        </div>
-                        <div className="text-3xl font-bold">{formatDuration(summary.totalWatchTimeSeconds)}</div>
-                        <div className="text-text-secondary text-sm">Watched</div>
+                    <div className="bg-surface rounded-2xl p-6 border border-white/5 shadow-glow-primary text-center">
+                        <div className="text-3xl font-bold text-primary mb-1">{formatDuration(summary.totalWatchTimeSeconds)}</div>
+                        <div className="text-text-secondary text-sm font-medium uppercase tracking-wider">Watched</div>
                     </div>
 
                     {/* Remaining Card */}
-                    <div className="bg-surface rounded-2xl p-6 border border-surface-elevated">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 bg-orange-500/20 rounded-lg">
-                                <Flame className="text-orange-500" size={24} />
-                            </div>
-                        </div>
-                        <div className="text-3xl font-bold">{formatDuration(summary.remainingTimeSeconds)}</div>
-                        <div className="text-text-secondary text-sm">Remaining</div>
+                    <div className="bg-surface rounded-2xl p-6 border border-white/5 shadow-[0_0_20px_-5px_var(--color-neon-purple)] text-center">
+                        <div className="text-3xl font-bold text-neon-purple mb-1">{formatDuration(summary.remainingTimeSeconds)}</div>
+                        <div className="text-text-secondary text-sm font-medium uppercase tracking-wider">Remaining</div>
                     </div>
                 </div>
 
-                {/* Completion Progress */}
-                <div className="bg-surface rounded-2xl p-6 border border-surface-elevated mb-8">
-                    <h2 className="text-xl font-bold mb-4">Overall Completion</h2>
-                    <div className="flex items-center gap-6">
-                        {/* Progress Ring */}
-                        <div className="relative w-32 h-32">
-                            <svg className="w-full h-full transform -rotate-90">
-                                <circle
-                                    cx="64"
-                                    cy="64"
-                                    r="56"
-                                    stroke="currentColor"
-                                    strokeWidth="12"
-                                    fill="none"
-                                    className="text-surface-elevated"
-                                />
-                                <circle
-                                    cx="64"
-                                    cy="64"
-                                    r="56"
-                                    stroke="currentColor"
-                                    strokeWidth="12"
-                                    fill="none"
-                                    strokeLinecap="round"
-                                    className="text-primary"
-                                    strokeDasharray={`${(summary.completionPercentage / 100) * 352} 352`}
-                                />
-                            </svg>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="text-2xl font-bold">{summary.completionPercentage}%</span>
-                            </div>
+                <div className="bg-surface rounded-2xl p-8 border border-white/5 shadow-glow-neon-blue/20 mb-8 flex flex-col sm:flex-row items-center gap-8">
+                    {/* Progress Ring with Gradient */}
+                    <div className="relative w-48 h-48 flex-shrink-0">
+                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 200 200">
+                            <defs>
+                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#10B981" /> {/* success */}
+                                    <stop offset="100%" stopColor="#3B82F6" /> {/* primary */}
+                                </linearGradient>
+                                <filter id="glow-spread" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="8" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                            </defs>
+
+                            {/* Track */}
+                            <circle
+                                cx="100"
+                                cy="100"
+                                r="70"
+                                stroke="currentColor"
+                                strokeWidth="12"
+                                fill="none"
+                                className="text-surface-elevated"
+                            />
+
+                            {/* Glow Layer (Blurry Background) */}
+                            <circle
+                                cx="100"
+                                cy="100"
+                                r="70"
+                                stroke="url(#progressGradient)"
+                                strokeWidth="12"
+                                fill="none"
+                                strokeLinecap="round"
+                                filter="url(#glow-spread)"
+                                strokeOpacity="0.6"
+                                strokeDasharray={`${(summary.completionPercentage / 100) * 440} 440`}
+                            />
+
+                            {/* Main Progress Layer (Sharp Foreground) */}
+                            <circle
+                                cx="100"
+                                cy="100"
+                                r="70"
+                                stroke="url(#progressGradient)"
+                                strokeWidth="12"
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeDasharray={`${(summary.completionPercentage / 100) * 440} 440`}
+                            />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-4xl font-bold text-white">{summary.completionPercentage}%</span>
                         </div>
-                        <div>
-                            <p className="text-text-secondary">
-                                You've completed {summary.watchedChapters} out of {summary.totalChapters} chapters
+                    </div>
+
+                    {/* Right Side Info */}
+                    <div className="flex-1 w-full">
+                        <h2 className="text-2xl font-bold mb-2">Progress</h2>
+
+                        {/* Linear Bar */}
+                        <div className="h-3 w-full bg-surface-elevated rounded-full overflow-hidden mb-4 border border-white/5">
+                            <div
+                                className="h-full bg-gradient-to-r from-success to-primary shadow-glow-success"
+                                style={{ width: `${summary.completionPercentage}%` }}
+                            />
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <p className="text-lg text-text-primary font-medium">
+                                <span className="text-success">{summary.watchedChapters}</span> of <span className="text-text-secondary">{summary.totalChapters} Chapters Watched</span>
                             </p>
-                            <p className="text-text-secondary mt-1">
-                                Keep going! {summary.totalChapters - summary.watchedChapters} chapters left to watch.
+                            <p className="text-sm text-text-secondary">
+                                {summary.totalChapters - summary.watchedChapters} chapters remaining
                             </p>
                         </div>
                     </div>
                 </div>
 
-                {/* Recent Activity */}
-                {recentActivity.length > 0 && (
-                    <div className="bg-surface rounded-2xl p-6 border border-surface-elevated mb-8">
-                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <TrendingUp size={20} />
-                            Recent Activity
-                        </h2>
-                        <div className="flex gap-2 items-end h-24">
-                            {recentActivity.map((day, i) => (
-                                <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                                    <div
-                                        className="w-full bg-primary rounded-t"
-                                        style={{
-                                            height: `${Math.min(100, (day.chaptersWatched / Math.max(...recentActivity.map(d => d.chaptersWatched))) * 100)}%`,
-                                            minHeight: '4px'
-                                        }}
-                                    />
-                                    <span className="text-xs text-text-secondary">
-                                        {new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}
-                                    </span>
-                                </div>
-                            ))}
+                {/* Weekly Viewing Activity Chart */}
+                <div className="bg-surface rounded-2xl p-8 border border-white/5 shadow-glow-neon-blue/20 mb-8">
+                    <h2 className="text-2xl font-bold mb-6 text-white">Weekly Viewing Activity</h2>
+
+                    <div className="relative h-64 w-full flex gap-4">
+                        {/* Y-Axis Labels */}
+                        <div className="flex flex-col justify-between text-text-secondary text-xs font-medium py-6 h-full text-right w-8">
+                            <span>{recentActivity.length > 0 ? Math.max(...recentActivity.map(d => d.chaptersWatched), 5) : 5}</span>
+                            <span>{recentActivity.length > 0 ? Math.round(Math.max(...recentActivity.map(d => d.chaptersWatched), 5) * 0.75) : 4}</span>
+                            <span>{recentActivity.length > 0 ? Math.round(Math.max(...recentActivity.map(d => d.chaptersWatched), 5) * 0.5) : 3}</span>
+                            <span>{recentActivity.length > 0 ? Math.round(Math.max(...recentActivity.map(d => d.chaptersWatched), 5) * 0.25) : 1}</span>
+                            <span>0</span>
+                        </div>
+
+                        {/* Chart Area */}
+                        <div className="flex-1 relative">
+                            {/* Horizontal Grid Lines */}
+                            <div className="absolute inset-0 flex flex-col justify-between py-6 h-full pointer-events-none">
+                                <div className="w-full h-[1px] bg-white/5"></div>
+                                <div className="w-full h-[1px] bg-white/5"></div>
+                                <div className="w-full h-[1px] bg-white/5"></div>
+                                <div className="w-full h-[1px] bg-white/5"></div>
+                                <div className="w-full h-[1px] bg-white/5"></div>
+                            </div>
+
+                            {/* Bars Container */}
+                            <div className="absolute inset-0 flex items-end justify-between px-2 pt-6 pb-6 h-full">
+                                {(recentActivity.length > 0 ? recentActivity : Array(7).fill({ chaptersWatched: 0, date: new Date() })).map((day, i) => {
+                                    const maxVal = recentActivity.length > 0 ? Math.max(...recentActivity.map(d => d.chaptersWatched), 5) : 5;
+                                    const heightPct = (day.chaptersWatched / maxVal) * 100;
+                                    const dayName = recentActivity.length > 0 ? new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 2) : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'][i];
+
+                                    return (
+                                        <div key={i} className="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+                                            {/* Bar */}
+                                            <div
+                                                className={`w-full max-w-[24px] sm:max-w-[40px] rounded-t-lg bg-gradient-to-b from-[#FFC107] to-[#3B82F6] transition-all duration-500 origin-bottom relative ${day.chaptersWatched > 0 ? 'opacity-90 group-hover:opacity-100 group-hover:scale-y-105' : 'opacity-20 h-1'}`}
+                                                style={{ height: day.chaptersWatched > 0 ? `${Math.max(heightPct, 4)}%` : '4px' }}
+                                            >
+                                                {/* Tooltip */}
+                                                {day.chaptersWatched > 0 && (
+                                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-surface-elevated text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10 pointer-events-none z-10">
+                                                        {day.chaptersWatched} chapters
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* X-Axis Label */}
+                                            <span className="text-xs text-text-secondary font-medium uppercase">
+                                                {dayName}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
-                )}
+                </div>
 
                 {/* Top Videos */}
                 {topVideos.length > 0 && (

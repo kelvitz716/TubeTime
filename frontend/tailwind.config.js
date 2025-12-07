@@ -19,6 +19,15 @@ export default {
                 'text-secondary': 'var(--color-text-secondary)',
                 success: 'var(--color-success)',
                 watched: 'var(--color-watched)',
+                neon: {
+                    blue: 'var(--color-neon-blue)',
+                    purple: 'var(--color-neon-purple)',
+                }
+            },
+            boxShadow: {
+                'glow-primary': '0 0 20px -5px var(--color-primary)',
+                'glow-success': '0 0 20px -5px var(--color-success)',
+                'glow-neon-blue': '0 0 20px -5px var(--color-neon-blue)',
             },
             borderRadius: {
                 DEFAULT: 'var(--border-radius)',

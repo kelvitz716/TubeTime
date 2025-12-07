@@ -177,7 +177,7 @@ export default function Dashboard() {
                     {!isAdding ? (
                         <button
                             onClick={() => setIsAdding(true)}
-                            className="col-span-1 flex items-center justify-center gap-2 px-4 py-3 bg-surface-elevated hover:bg-surface rounded-xl text-text-primary text-sm font-bold transition-all border border-white/5 active:scale-95"
+                            className="col-span-1 flex items-center justify-center gap-2 px-4 py-3 bg-primary hover:bg-primary-dark shadow-glow-primary rounded-full text-white text-sm font-bold transition-all active:scale-95"
                         >
                             <Plus size={18} />
                             <span className="truncate">Add Video</span>
@@ -188,21 +188,21 @@ export default function Dashboard() {
                                 value={newVideoUrl}
                                 onChange={(e) => setNewVideoUrl(e.target.value)}
                                 placeholder="Paste YouTube URL..."
-                                className="flex-1 px-4 py-3 bg-surface-elevated text-text-primary rounded-xl outline-none focus:ring-2 focus:ring-primary text-sm"
+                                className="flex-1 px-6 py-3 bg-surface-elevated text-text-primary rounded-full outline-none focus:ring-2 focus:ring-primary focus:shadow-glow-primary text-sm border border-white/5"
                                 autoFocus
                             />
                             <div className="flex gap-2">
                                 <button
                                     type="submit"
                                     disabled={addVideoMutation.isPending || previewVideoMutation.isPending}
-                                    className="flex-1 px-4 py-3 bg-primary hover:bg-primary-dark text-background font-bold rounded-xl text-sm whitespace-nowrap"
+                                    className="flex-1 px-6 py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-full text-sm whitespace-nowrap shadow-glow-primary transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100"
                                 >
                                     {previewVideoMutation.isPending ? '...' : 'Add'}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setIsAdding(false)}
-                                    className="px-4 py-3 bg-surface text-text-secondary rounded-xl text-sm"
+                                    className="px-6 py-3 bg-surface text-text-secondary hover:text-text-primary rounded-full text-sm border border-white/5"
                                 >
                                     Cancel
                                 </button>
@@ -210,11 +210,7 @@ export default function Dashboard() {
                         </form>
                     )}
 
-                    {/* Selection Mode Controls - Always visible in grid, or replacing Add? 
-                    The previous design had them side-by-side. 
-                    Let's use a grid where "Add" is left, "Select" is right. 
-                    If adding, the form takes full width.
-                */}
+                    {/* Selection Mode Controls */}
                     {!isAdding && (
                         <div className="col-span-1 flex justify-end">
                             {isSelectionMode ? (
@@ -222,7 +218,7 @@ export default function Dashboard() {
                                     <button
                                         onClick={handleBulkDeleteClick}
                                         disabled={selectedVideoIds.size === 0}
-                                        className="flex-1 flex items-center justify-center gap-2 px-2 py-3 bg-red-600/20 text-red-500 rounded-xl text-sm font-bold transition-colors disabled:opacity-50"
+                                        className="flex-1 flex items-center justify-center gap-2 px-2 py-3 bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 rounded-full text-sm font-bold transition-all disabled:opacity-50"
                                     >
                                         <Trash2 size={18} />
                                         <span className="hidden sm:inline">Delete</span>
@@ -232,7 +228,7 @@ export default function Dashboard() {
                                             setIsSelectionMode(false);
                                             setSelectedVideoIds(new Set());
                                         }}
-                                        className="flex-none px-3 py-3 bg-surface text-text-secondary rounded-xl"
+                                        className="flex-none px-3 py-3 bg-surface text-text-secondary hover:text-text-primary rounded-full border border-white/5"
                                     >
                                         <XSquare size={18} />
                                     </button>
@@ -240,7 +236,7 @@ export default function Dashboard() {
                             ) : (
                                 <button
                                     onClick={() => setIsSelectionMode(true)}
-                                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-surface hover:bg-surface-elevated rounded-xl text-text-secondary hover:text-text-primary text-sm font-bold transition-all border border-white/5 active:scale-95"
+                                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-surface hover:bg-surface-elevated text-text-secondary hover:text-white rounded-full text-sm font-bold transition-all border border-white/5 active:scale-95"
                                 >
                                     <CheckSquare size={18} />
                                     <span>Select</span>
