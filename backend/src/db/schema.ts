@@ -52,8 +52,19 @@ export const resourceAccounts = sqliteTable('resource_accounts', {
     id: integer('id').primaryKey({ autoIncrement: true }),
     name: text('name').notNull(),
     email: text('email'),
+    isActive: integer('is_active', { mode: 'boolean' }).default(false),
+    startedUsingAt: integer('started_using_at', { mode: 'timestamp' }),
+    createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
+export const resourceQuotas = sqliteTable('resource_quotas', {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    accountId: integer('account_id').notNull().references(() => resourceAccounts.id, { onDelete: 'cascade' }),
+    resourceType: text('resource_type').notNull(), // 'GEMINI', 'CLAUDE'
     status: text('status').notNull().default('AVAILABLE'), // 'AVAILABLE', 'EXHAUSTED'
     exhaustedAt: integer('exhausted_at', { mode: 'timestamp' }),
     refreshAt: integer('refresh_at', { mode: 'timestamp' }),
-    createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-});
+}, (table) => ({
+    accountIdx: index('idx_quotas_account').on(table.accountId),
+}));
+

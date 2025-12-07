@@ -3,10 +3,10 @@ import { resourceService } from '../services/resourceService.js';
 
 const router = express.Router();
 
-// GET all accounts
+// GET all accounts with their quotas
 router.get('/', async (req, res) => {
     try {
-        const accounts = await resourceService.getAllAccounts();
+        const accounts = await resourceService.getAllAccountsWithQuotas();
         res.json(accounts);
     } catch (error) {
         console.error('Error fetching resource accounts:', error);
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// POST new account
+// POST new account (auto-creates Gemini + Claude quotas)
 router.post('/', async (req, res) => {
     try {
         const { name, email } = req.body;
@@ -29,11 +29,23 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT update account (e.g., mark exhausted/available)
+// POST set active account
+router.post('/:id/active', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const account = await resourceService.setActiveAccount(id);
+        res.json(account);
+    } catch (error) {
+        console.error('Error setting active account:', error);
+        res.status(500).json({ error: 'Failed to set active account' });
+    }
+});
+
+// PUT update account info
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const updates = req.body; // Expects { status, exhaustedAt, refreshAt }
+        const updates = req.body;
         const account = await resourceService.updateAccount(Number(id), updates);
         if (!account) {
             return res.status(404).json({ error: 'Account not found' });
@@ -42,6 +54,22 @@ router.put('/:id', async (req, res) => {
     } catch (error) {
         console.error('Error updating resource account:', error);
         res.status(500).json({ error: 'Failed to update resource account' });
+    }
+});
+
+// PUT update a specific quota (mark exhausted/available)
+router.put('/quotas/:quotaId', async (req, res) => {
+    try {
+        const { quotaId } = req.params;
+        const updates = req.body; // Expects { status, exhaustedAt, refreshAt }
+        const quota = await resourceService.updateQuota(Number(quotaId), updates);
+        if (!quota) {
+            return res.status(404).json({ error: 'Quota not found' });
+        }
+        res.json(quota);
+    } catch (error) {
+        console.error('Error updating quota:', error);
+        res.status(500).json({ error: 'Failed to update quota' });
     }
 });
 

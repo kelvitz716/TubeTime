@@ -24,11 +24,17 @@
 }
 @layer utilities {
   .glass {
-    @apply bg-surface/80 backdrop-blur-md border border-white/5;
+    background-color: rgba(21, 27, 43, 0.8); /* --color-surface with 80% opacity */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
   
   .glass-elevated {
-    @apply bg-surface-elevated/80 backdrop-blur-md border border-white/5;
+    background-color: rgba(30, 41, 59, 0.8); /* --color-surface-elevated with 80% opacity */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
 
