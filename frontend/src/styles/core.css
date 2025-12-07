@@ -21,11 +21,15 @@
   }
 }
 @layer utilities {
-  @keyframes popIn {
-    0% { opacity: 0; transform: scale(0.95); }
-    100% { opacity: 1; transform: scale(1); }
+  .glass {
+    @apply bg-surface/80 backdrop-blur-md border border-white/5;
   }
-  .animate-pop-in {
-    animation: popIn 0.2s ease-out forwards;
+  
+  .glass-elevated {
+    @apply bg-surface-elevated/80 backdrop-blur-md border border-white/5;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }

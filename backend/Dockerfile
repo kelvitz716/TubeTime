@@ -14,6 +14,9 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json ./
 
+# Install build dependencies for native modules (better-sqlite3)
+RUN apk add --no-cache python3 make g++
+
 # Install production dependencies + tsx (needed at runtime but listed as devDep)
 RUN npm ci --only=production && \
     npm install tsx && \
