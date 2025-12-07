@@ -2,11 +2,12 @@ import { db } from '../db/database';
 import { chapters, watchProgress } from '../db/schema';
 import { eq, and, lt, asc } from 'drizzle-orm';
 
-import fs from 'fs';
+
+
 
 export class ChapterService {
     log(message) {
-        fs.appendFileSync('debug_log.txt', message + '\n');
+        console.log('[ChapterService] ' + message);
     }
 
     async markChapterWatched(userId, videoId, chapterId, markPrevious = false) {

@@ -4,7 +4,12 @@ import { drizzle } from 'drizzle-orm/better-sqlite3';
 import * as schema from './src/db/schema.ts';
 import bcrypt from 'bcryptjs';
 
-const sqlite = new Database('tubetime.db');
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const dbPath = process.env.DATABASE_URL || 'tubetime.db';
+const sqlite = new Database(dbPath);
 const db = drizzle(sqlite, { schema });
 
 async function seedDatabase() {

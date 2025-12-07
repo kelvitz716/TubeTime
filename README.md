@@ -95,8 +95,10 @@ npm start
 ```bash
 cd frontend
 npm run dev
-# App available at http://localhost:5173
+# App available at http://localhost:5173 (Development Mode)
 ```
+
+> **Note:** When running via Docker, the app is available at `http://localhost:8080`.
 
 ### Default Test Account
 - **Username:** `testuser`
@@ -207,7 +209,7 @@ NODE_ENV=development
 docker compose up --build
 ```
 
-Access the app at `http://localhost:5173`
+Access the app at `http://localhost:8080`
 
 ---
 

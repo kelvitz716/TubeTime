@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import client from '../api/client';
 import { Link } from 'react-router-dom';
-import { Plus, Play, Clock, Trash2, CheckSquare, XSquare } from 'lucide-react';
+import { Plus, Play, Clock, Trash2, CheckSquare, XSquare, BarChart2 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 
@@ -151,6 +151,13 @@ export default function Dashboard() {
                 <h1 className="text-4xl font-bold text-primary">TubeTime</h1>
                 <div className="flex items-center gap-4">
                     <span className="text-text-secondary">Hi, {user?.username}</span>
+                    <Link
+                        to="/stats"
+                        className="flex items-center gap-2 px-3 py-2 text-text-secondary hover:text-primary hover:bg-surface-elevated rounded-lg transition-colors"
+                    >
+                        <BarChart2 size={18} />
+                        <span className="text-sm">Stats</span>
+                    </Link>
                     <button onClick={() => logout()} className="text-sm text-text-secondary hover:text-text-primary">
                         Logout
                     </button>

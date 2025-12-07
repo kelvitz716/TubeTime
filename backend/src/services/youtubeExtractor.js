@@ -1,24 +1,48 @@
 import { exec } from 'child_process';
 import util from 'util';
+import { getCachedVideo, cacheVideo } from './cacheService.js';
 
 const execPromise = util.promisify(exec);
 
 export class YouTubeExtractor {
+    // Extract video ID from URL
+    extractVideoId(url) {
+        const patterns = [
+            /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+        ];
+        for (const pattern of patterns) {
+            const match = url.match(pattern);
+            if (match) return match[1];
+        }
+        return null;
+    }
+
     async extractInfo(url) {
+        // Check cache first
+        const videoId = this.extractVideoId(url);
+        if (videoId) {
+            const cached = getCachedVideo(videoId);
+            if (cached) {
+                console.log(`Cache hit for video: ${videoId}`);
+                return cached;
+            }
+        }
+
         try {
             // Tier 1: yt-dlp
-            return await this.extractWithYtDlp(url);
+            const result = await this.extractWithYtDlp(url);
+
+            // Cache the result
+            cacheVideo(result.id, result);
+            console.log(`Cached video: ${result.id}`);
+
+            return result;
         } catch (error) {
             console.warn('Tier 1 failed, trying Tier 2...', error);
             try {
-                // Tier 2: oEmbed (Mocked for now as per instructions implies logic but we can use simple fetch if needed, 
-                // but for this implementation we will focus on the structure. 
-                // Real oEmbed requires fetching https://www.youtube.com/oembed?url=... and parsing description)
                 return await this.extractWithOEmbed(url);
             } catch (error2) {
                 console.warn('Tier 2 failed, trying Tier 3...', error2);
-                // Tier 3: Regex on description (Usually requires the description from Tier 2 or page scrape)
-                // Fallback
                 return this.getFallback(url);
             }
         }

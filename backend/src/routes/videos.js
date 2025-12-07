@@ -3,6 +3,7 @@ import { db } from '../db/database';
 import { videos, chapters, watchProgress } from '../db/schema';
 import { youtubeExtractor } from '../services/youtubeExtractor';
 import { eq, desc, and } from 'drizzle-orm';
+import { invalidateVideoCache } from '../services/cacheService.js';
 
 const router = express.Router();
 
@@ -163,6 +164,9 @@ router.delete('/:id', async (req, res) => {
         if (result.changes === 0) {
             return res.status(404).json({ message: 'Video not found or unauthorized' });
         }
+
+        // Invalidate cache
+        invalidateVideoCache(req.params.id);
 
         res.json({ message: 'Video deleted successfully' });
     } catch (error) {

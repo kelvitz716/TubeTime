@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useAuth } from './hooks/useAuth';
 import Dashboard from './pages/Dashboard';
 import VideoDetails from './pages/VideoDetails';
+import Stats from './pages/Stats';
 import Login from './pages/Login';
 
 const ProtectedRoute = ({ children }) => {
@@ -40,9 +41,18 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route
+                    path="/stats"
+                    element={
+                        <ProtectedRoute>
+                            <Stats />
+                        </ProtectedRoute>
+                    }
+                />
             </Routes>
         </Router>
     );
 }
 
 export default App;
+

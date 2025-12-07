@@ -30,8 +30,8 @@ tubetime.db-journal
 
 # Editor directories and files
 .idea
-.vscode
 *.swp
+*.swo
 *.swo
 
 # Temporary debug files

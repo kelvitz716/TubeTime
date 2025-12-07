@@ -6,26 +6,29 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./backend:/app
+      - ./backend:/app:z
       - /app/node_modules
       - tube_data:/data
     environment:
       - NODE_ENV=development
       - DATABASE_URL=/data/tubetime.db
-      - JWT_SECRET=dev_secret_key_change_in_prod
+      - JWT_SECRET=dev_secret_key_change_in_prod # WARNING: Change this in production!
+      - FRONTEND_URL=http://localhost:8080
     restart: unless-stopped
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
     ports:
-      - "5173:5173"
+      - "8080:8080"
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app:z
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://localhost:3000
+      - VITE_API_URL=/api
     depends_on:
       - backend
 

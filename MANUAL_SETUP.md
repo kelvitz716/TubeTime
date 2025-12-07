@@ -116,7 +116,7 @@ Open browser to `http://localhost:5173`
 docker compose up --build
 ```
 
-Then access `http://localhost:5173` and run the same verification tests.
+Then access `http://localhost:8080` and run the same verification tests.
 
 ## Troubleshooting
 
