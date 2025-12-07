@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import client from '../api/client';
 import { Link } from 'react-router-dom';
-import { Plus, Play, Clock, Trash2, CheckSquare, XSquare, BarChart2, LogOut } from 'lucide-react';
+import { Plus, Play, Clock, Trash2, CheckSquare, XSquare, BarChart2, LogOut, Calendar } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import PageContainer from '../components/ui/PageContainer';
@@ -161,6 +161,13 @@ export default function Dashboard() {
                             title="Stats"
                         >
                             <BarChart2 size={20} />
+                        </Link>
+                        <Link
+                            to="/resources"
+                            className="p-2 text-text-secondary hover:text-neon-blue hover:bg-surface-elevated rounded-lg transition-colors"
+                            title="Resource Tracker"
+                        >
+                            <Calendar size={20} />
                         </Link>
                         <button
                             onClick={() => logout()}

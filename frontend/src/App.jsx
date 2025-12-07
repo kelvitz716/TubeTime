@@ -6,6 +6,8 @@ import VideoDetails from './pages/VideoDetails';
 import Stats from './pages/Stats';
 import Login from './pages/Login';
 
+import ResourceTracker from './pages/ResourceTracker';
+
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, isLoading } = useAuth();
 
@@ -46,6 +48,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Stats />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/resources"
+                    element={
+                        <ProtectedRoute>
+                            <ResourceTracker />
                         </ProtectedRoute>
                     }
                 />

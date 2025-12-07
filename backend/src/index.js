@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.js';
 import videoRoutes from './routes/videos.js';
 import chapterRoutes from './routes/chapters.js';
 import statsRoutes from './routes/stats.js';
+import resourceRoutes from './routes/resourceRoutes.js';
 import { initializeSocket } from './services/socketManager.js';
 import './config/passport.js';
 
@@ -48,6 +49,7 @@ app.use('/auth', authRoutes);
 app.use('/videos', videoRoutes);
 app.use('/chapters', chapterRoutes);
 app.use('/stats', statsRoutes);
+app.use('/resources', resourceRoutes);
 
 // Health check endpoint for Docker
 app.get('/health', (req, res) => {

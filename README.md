@@ -43,7 +43,13 @@
 - Dark mode interface with vibrant accents
 - Smooth animations and micro-interactions
 - Responsive design for all screen sizes
+- Responsive design for all screen sizes
 - Human-readable durations (1:23:45 format)
+
+### ⚡ Resource Tracker
+- **Proactive Management**: Track 7-day rolling quotas for API keys or service accounts
+- **Visual Dashboard**: See at a glance which account is active and when others refresh
+- **Smart Rotation**: Automatically suggests the next available account
 
 ---
 
@@ -169,6 +175,13 @@ If a video doesn't have built-in chapters, you can:
 
 ### Mark Previous Chapters
 When marking a later chapter as watched, TubeTime asks if you want to mark all previous unwatched chapters too—perfect for catching up after a break.
+
+### Resource Tracker
+Managing free-tier limits (like Google Cloud quotas) often requires rotating between multiple accounts. The **Resource Tracker**:
+1. Monitors the "exhaustion" time of each account.
+2. Calculates the exact 7-day refresh date.
+3. Provides a countdown timer and status indicators (Available/Exhausted).
+
 
 ---
 

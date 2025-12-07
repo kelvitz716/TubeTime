@@ -10,10 +10,10 @@ services:
       - /app/node_modules
       - tube_data:/data
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=${NODE_ENV:-development}
       - DATABASE_URL=/data/tubetime.db
-      - JWT_SECRET=dev_secret_key_change_in_prod # WARNING: Change this in production!
-      - FRONTEND_URL=http://localhost:8080
+      - JWT_SECRET=${JWT_SECRET:-dev_secret_fallback_do_not_use_in_prod}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:8080}
     restart: unless-stopped
 
   frontend:

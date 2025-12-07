@@ -11,7 +11,11 @@ export default defineConfig({
         },
     },
     server: {
-        port: 5173,
+        host: true, // Bind to all interfaces
+        port: 8080, // Match docker-compose port
+        watch: {
+            usePolling: true,
+        },
         proxy: {
             '/api': {
                 target: process.env.VITE_API_URL || 'http://localhost:3000',

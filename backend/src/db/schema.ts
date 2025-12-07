@@ -47,3 +47,13 @@ export const watchProgress = sqliteTable('watch_progress', {
 }, (table) => ({
     videoIdx: index('idx_progress_video').on(table.videoId),
 }));
+
+export const resourceAccounts = sqliteTable('resource_accounts', {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    name: text('name').notNull(),
+    email: text('email'),
+    status: text('status').notNull().default('AVAILABLE'), // 'AVAILABLE', 'EXHAUSTED'
+    exhaustedAt: integer('exhausted_at', { mode: 'timestamp' }),
+    refreshAt: integer('refresh_at', { mode: 'timestamp' }),
+    createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
