@@ -1,0 +1,28 @@
+# fly.toml app configuration file generated for tubetime on 2025-12-07T13:10:00+03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'tubetime'
+primary_region = 'ams' # Amsterdam, change as needed
+
+[build]
+  dockerfile = 'Dockerfile.fly'
+
+[env]
+  NODE_ENV = 'production'
+  PORT = '3000'
+  # DATABASE_URL will be set to /data/tubetime.db automatically by the Dockerfile logic
+  DATABASE_URL = '/data/tubetime.db'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[mounts]]
+  source = 'tube_data'
+  destination = '/data'

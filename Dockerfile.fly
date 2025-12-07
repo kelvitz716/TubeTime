@@ -1,0 +1,72 @@
+# =============================================================================
+# TubeTime Fly.io Deployment Dockerfile
+# =============================================================================
+# Builds Frontend -> Builds Backend -> Combines them into one image
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Stage 1: Build Frontend
+# -----------------------------------------------------------------------------
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app/frontend
+
+# Copy frontend package files
+COPY frontend/package*.json ./
+RUN npm ci
+
+# Copy frontend source
+COPY frontend/ .
+
+# Build for production
+# Verify VITE_API_URL is relative so it works on same origin
+ENV VITE_API_URL="" 
+RUN npm run build
+
+# -----------------------------------------------------------------------------
+# Stage 2: Backend Dependencies & Runtime
+# -----------------------------------------------------------------------------
+FROM node:20-alpine
+
+# Install system dependencies (ffmpeg, python3 for yt-dlp, build tools for sqlite)
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    ffmpeg \
+    make \
+    g++ \
+    && python3 -m venv /venv \
+    && /venv/bin/pip install --no-cache-dir yt-dlp \
+    && ln -s /venv/bin/yt-dlp /usr/local/bin/yt-dlp
+
+WORKDIR /app
+
+# Copy backend package files
+COPY backend/package*.json ./
+
+# Install production dependencies + tsx
+RUN npm ci --only=production && \
+    npm install tsx && \
+    npm cache clean --force
+
+# Copy backend source
+COPY backend/src ./src
+COPY backend/drizzle ./drizzle
+COPY backend/seed.js .
+COPY backend/drizzle.config.js .
+
+# Copy built frontend assets to 'public' folder in backend
+COPY --from=frontend-builder /app/frontend/dist ./public
+
+# Create data directory for SQLite volume
+RUN mkdir -p /data
+
+# Set environment
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV DATABASE_URL=/data/tubetime.db
+
+# Expose port
+EXPOSE 3000
+
+# Start command
+CMD ["npx", "tsx", "src/index.js"]

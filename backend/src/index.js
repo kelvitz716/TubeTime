@@ -12,10 +12,15 @@ import statsRoutes from './routes/stats.js';
 import resourceRoutes from './routes/resourceRoutes.js';
 import { initializeSocket } from './services/socketManager.js';
 import './config/passport.js';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
 const app = express();
+// Trust first proxy (Fly.io load balancer) for secure cookies
+app.set('trust proxy', 1);
+
 const httpServer = createServer(app);
 const PORT = process.env.PORT || 3000;
 
@@ -45,19 +50,46 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/auth', authRoutes);
-app.use('/videos', videoRoutes);
-app.use('/chapters', chapterRoutes);
-app.use('/stats', statsRoutes);
-app.use('/resources', resourceRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/videos', videoRoutes);
+app.use('/api/chapters', chapterRoutes);
+app.use('/api/stats', statsRoutes);
+app.use('/api/resources', resourceRoutes);
 
 // Health check endpoint for Docker
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
+// Serve static files from the 'public' directory
+const publicPath = path.join(process.cwd(), 'public');
+if (fs.existsSync(publicPath)) {
+    app.use(express.static(publicPath));
+}
+
 app.get('/', (req, res) => {
-    res.send('TubeTime Backend API');
+    // If index.html exists, serve it (production mode)
+    const indexPath = path.join(publicPath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+    } else {
+        res.send('TubeTime Backend API (Frontend not served)');
+    }
+});
+
+app.get('*', (req, res) => {
+    // API 404 handler
+    if (req.path.startsWith('/api') || req.path.startsWith('/auth') || req.path.startsWith('/videos') || req.path.startsWith('/chapters') || req.path.startsWith('/stats') || req.path.startsWith('/resources')) {
+        return res.status(404).json({ error: 'Not found' });
+    }
+
+    // Frontend catch-all for client-side routing
+    const indexPath = path.join(publicPath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+    } else {
+        res.status(404).send('Not Found');
+    }
 });
 
 httpServer.listen(PORT, () => {

@@ -324,4 +324,46 @@ sudo ufw enable
 
 ---
 
-Made with ❤️ for self-hosters
+
+---
+
+## Cloud Deployment: Fly.io (Free Tier Friendly)
+
+This guide uses a single-container approach to minimize costs (1 VM, 1 Volume).
+
+### 1. Setup
+
+The project includes specialized configuration files:
+- `fly.toml`: Configures the app and persistent storage.
+- `Dockerfile.fly`: Builds frontend and backend into a single image.
+
+### 2. Deploy
+
+```bash
+# First time setup (requires Fly CLI installed)
+fly launch --no-deploy --copy-config
+
+# Deploy the application
+fly deploy
+```
+
+### 3. Initialize Database (First Run Only)
+
+Since the persistent volume starts empty, you must run migrations manually via SSH:
+
+```bash
+# Create database tables
+fly ssh console -C "npx drizzle-kit push:sqlite"
+
+# (Optional) Seed initial data
+fly ssh console -C "npx tsx seed.js"
+```
+
+### 4. Updates
+
+To update your application after code changes (including standard cleanup):
+
+```bash
+fly deploy
+```
+
